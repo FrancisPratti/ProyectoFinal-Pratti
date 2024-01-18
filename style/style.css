@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&display=swap');
+body {
+    min-height: 100%;
+    background-color: #d4e1d4;
+    font-family: 'Cinzel';
+    font-weight: 600;
+}
 .logo {
     height: 60px;
     width: 60px;
@@ -20,9 +26,9 @@
 }
 .navbar {
 padding: 0;
+margin-bottom: 6rem;
 }
 section {
-    padding: 2rem 6rem;
     display: flex;
     flex-direction: row;
     gap: 2rem;
@@ -31,15 +37,18 @@ section {
 .card {
     padding: 1rem;
 }
-.dropdown {
-    margin-block: 0.5rem;
-}
+
 .card-img-top {
     max-height: 15rem;
 }
 main {
-    background-color: #d4e1d4;
     margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5rem 3rem;
+
 }
 .cantidad {
     margin-bottom: 1rem;
@@ -48,6 +57,7 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+    min-height: max-content;
 }
 .dado {
     background-color: white;
@@ -60,3 +70,15 @@ main {
 .img-dado {
     object-fit: scale-down;
 }
+.resultado {
+    min-height: max-content;
+    display: none;
+}
+.nombre-card {
+    margin: 2rem;
+}
+label {
+    text-decoration: underline;
+    font-weight: 800;
+}
+

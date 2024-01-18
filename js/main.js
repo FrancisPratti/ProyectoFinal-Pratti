@@ -1,3 +1,4 @@
+// Dados organizados en un array
 const arrayDados = [
   {
     id: 4,
@@ -37,70 +38,70 @@ const arrayDados = [
   }
 ];
 
-// Definición de variables globales
-// Definición de variables globales
+const guardar = document.getElementById ("guardar");
+const nombreInput = document.getElementById ("nombre")
+
+guardar.addEventListener("click", function() {
+  const nombre = nombreInput.value;
+  localStorage.setItem('nombre', nombre);
+});
+
 let cantidadDados;
 let carasDado;
 
-// Creacion de tarjetas de Dados
-const contenedorDados = document.querySelector("#contenedor-dados")
+// Creación de tarjetas de Dados
+const contenedorDados = document.querySelector("#contenedor-dados");
 
-function tiposDeDados() {
-    arrayDados.forEach(dado => {
-      const div = document.createElement("div")
-      div.classList.add("dado");
-      div.innerHTML = `
-        <img src="${dado.imagen}" class="card-img-top img-dado" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${dado.titulo}</h5>
-          <h6>Cantidad de dados</h6>
-          <input type="number" min="1" max="10" class="cantidad" id="${dado.input}">
-          <button type="button" class="btn btn-primary" id="liveToastBtn${dado.id}">Tirar dados</button>
-        </div>
-      `;
-      contenedorDados.appendChild(div);
+arrayDados.forEach(dado => {
+  const div = document.createElement("div");
+  div.classList.add("dado");
+  div.innerHTML = `
+    <img src="${dado.imagen}" class="card-img-top img-dado" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">${dado.titulo}</h5>
+      <h6>Cantidad de dados</h6>
+      <input type="number" min="1" max="10" class="cantidad" id="${dado.input}" value="1">
+      <button type="button" class="btn btn-primary" id="liveToastBtn${dado.id}">Tirar dados</button>
+    </div>
+  `;
+  contenedorDados.appendChild(div);
+});
 
-      const botonRoll = contenedorDados.querySelectorAll(".btn")
+// Funcionalidad del botón
+const botonRoll = contenedorDados.querySelectorAll(".btn");
 
-      botonRoll.forEach(boton => {
-        boton.addEventListener("click", () => {
-          const dadoSeleccionado = arrayDados.find(dado => dado.id === parseInt(boton.id.replace("liveToastBtn", "")));
-          cantidadDados = document.getElementById(dadoSeleccionado.input.value);
-          carasDado = parseInt(boton.id.replace("liveToastBtn", ""));
-          // Llamada a la función tirarDados solo una vez
-          const resultados = SimuladorDados.tirarDados(cantidadDados, carasDado);
-          const suma = SimuladorDados.obtenerSuma();
-          const resultadosTexto = `Resultados: ${resultados.join(', ')}\nSuma total: ${suma}`;
-          console.log(resultadosTexto);
+botonRoll.forEach(boton => {
+  boton.addEventListener("click", () => {
+    const dadoSeleccionado = arrayDados.find(dado => dado.id === parseInt(boton.id.replace("liveToastBtn", "")));
+    cantidadDados = document.getElementById(dadoSeleccionado.input).value;
+    carasDado = parseInt(boton.id.replace("liveToastBtn", ""));
 
-                // Mostrar los resultados en el Toast de Bootstrap
-                const resultadosShow = document.getElementById("resultados");
-                resultadosShow.innerHTML = `
-                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header">
-                                <img src="..." class="rounded me-2" alt="...">
-                                <strong class="me-auto">Tu resultado:</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                ${resultados.join(', ')}<br>Suma total: ${suma}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            })
-        });
-    });
-}
+    // Llamada a la función tirarDados
+    const resultados = SimuladorDados.tirarDados(cantidadDados, carasDado);
+    const suma = SimuladorDados.obtenerSuma();
+    const resultadosTexto = `Resultados: ${resultados.join(', ')}\nSuma total: ${suma}`;
+    console.log(resultadosTexto);
 
-// Llamada a la función
-tiposDeDados();
+    // Toast para mostrar el resultado obtenido
+    Toastify({
+      text: `${nombre.value} tiró: ${resultados.join(', ')}\nSuma total: ${suma}`,
+      duration: 7000,
+      close: true,
+      newWindow: true,
+      gravity: "bottom",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #0e794a, #96c93d)",
+      },
+    }).showToast();
 
+    // Guardar resultados después de interactuar con los dados
+    guardarResultadosEnLocalStorage();
+  });
+});
 
-
-//Fin creacion tarjetas de Dados
-
+// Función para tirar dados
 const SimuladorDados = {
   resultados: [],
   suma: 0,
@@ -119,6 +120,8 @@ const SimuladorDados = {
       this.suma += resultadoDado;
     }
 
+    guardarResultadosEnLocalStorage();
+
     return this.resultados;
   },
 
@@ -131,12 +134,17 @@ const SimuladorDados = {
   }
 };
 
+// Recuperar resultados al cargar la página
+const resultadosGuardados = localStorage.getItem('resultados');
+if (resultadosGuardados) {
+  const resultadosParseados = JSON.parse(resultadosGuardados);
+  SimuladorDados.resultados = resultadosParseados.resultados || [];
+  SimuladorDados.suma = resultadosParseados.suma || 0;
+}
 
-let resultados = SimuladorDados.tirarDados(cantidadDados, carasDado);
-let suma = SimuladorDados.obtenerSuma();
-let resultadosTexto = `Resultados: ${resultados.join(', ')}\nSuma total: ${suma}`;
-console.log(resultadosTexto);
-  
-
-
-
+// Función para guardar resultados en localStorage
+function guardarResultadosEnLocalStorage() {
+  // Guarda los resultados actuales en localStorage
+  const resultadosAGuardar = { resultados: SimuladorDados.resultados, suma: SimuladorDados.suma };
+  localStorage.setItem('resultados', JSON.stringify(resultadosAGuardar));
+}
