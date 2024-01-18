@@ -38,6 +38,16 @@ const arrayDados = [
   }
 ];
 
+document.addEventListener('DOMContentLoaded', function() {
+  // Obtén el valor del nombre almacenado en el localStorage
+  var nombreGuardado = localStorage.getItem('nombre');
+
+  // Si hay un nombre guardado, actualiza el campo de entrada con ese valor
+  if (nombreGuardado) {
+      document.getElementById('nombre').value = nombreGuardado;
+  }
+});
+
 const guardar = document.getElementById ("guardar");
 const nombreInput = document.getElementById ("nombre")
 
