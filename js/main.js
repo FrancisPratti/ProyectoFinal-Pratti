@@ -1,46 +1,6 @@
-// Dados organizados en un array
-const arrayDados = [
-  {
-    id: 4,
-    titulo: "Dado de 4 caras",
-    imagen: "./img/d4.png",
-    input: "d4",
-  },
-  {
-    id: 6,
-    titulo: "Dado de 6 caras",
-    imagen: "./img/d6.png",
-    input: "d6",
-  },
-  {
-    id: 8,
-    titulo: "Dado de 8 caras",
-    imagen: "./img/d8.png",
-    input: "d8",
-  },
-  {
-    id: 10,
-    titulo: "Dado de 10 caras",
-    imagen: "./img/d10.png",
-    input: "d10",
-  },
-  {
-    id: 12,
-    titulo: "Dado de 12 caras",
-    imagen: "./img/d12.png",
-    input: "d12",
-  },
-  {
-    id: 20,
-    titulo: "Dado de 20 caras",
-    imagen: "./img/d20.png",
-    input: "d20",
-  }
-];
-
 document.addEventListener('DOMContentLoaded', function() {
   // Obtén el valor del nombre almacenado en el localStorage
-  var nombreGuardado = localStorage.getItem('nombre');
+  const nombreGuardado = localStorage.getItem('nombre');
 
   // Si hay un nombre guardado, actualiza el campo de entrada con ese valor
   if (nombreGuardado) {
@@ -51,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const guardar = document.getElementById ("guardar");
 const nombreInput = document.getElementById ("nombre")
 
+//Permite reemplazar el nombre guardado
 guardar.addEventListener("click", function() {
   const nombre = nombreInput.value;
   localStorage.setItem('nombre', nombre);
@@ -62,7 +23,10 @@ let carasDado;
 // Creación de tarjetas de Dados
 const contenedorDados = document.querySelector("#contenedor-dados");
 
-arrayDados.forEach(dado => {
+fetch ("./js/dados.json")
+    .then(response => response.json())
+    .then (arrayDados => { 
+      arrayDados.forEach(dado => {
   const div = document.createElement("div");
   div.classList.add("dado");
   div.innerHTML = `
@@ -76,7 +40,6 @@ arrayDados.forEach(dado => {
   `;
   contenedorDados.appendChild(div);
 });
-
 // Funcionalidad del botón
 const botonRoll = contenedorDados.querySelectorAll(".btn");
 
@@ -94,7 +57,7 @@ botonRoll.forEach(boton => {
 
     // Toast para mostrar el resultado obtenido
     Toastify({
-      text: `${nombre.value} tiró: ${resultados.join(', ')}\nSuma total: ${suma}`,
+      text: `${nombre.value} tiró: ${resultados.join(', ')}\nTotal: ${suma}`,
       duration: 7000,
       close: true,
       newWindow: true,
@@ -110,6 +73,7 @@ botonRoll.forEach(boton => {
     guardarResultadosEnLocalStorage();
   });
 });
+})
 
 // Función para tirar dados
 const SimuladorDados = {

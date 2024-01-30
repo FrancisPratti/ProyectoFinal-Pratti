@@ -1,0 +1,8 @@
+[
+    { "id": 4, "titulo": "Dado de 4 caras", "imagen": "./img/d4.png", "input": "d4" },
+    { "id": 6, "titulo": "Dado de 6 caras", "imagen": "./img/d6.png", "input": "d6" },
+    { "id": 8, "titulo": "Dado de 8 caras", "imagen": "./img/d8.png", "input": "d8" },
+    { "id": 10, "titulo": "Dado de 10 caras", "imagen": "./img/d10.png", "input": "d10" },
+    { "id": 12, "titulo": "Dado de 12 caras", "imagen": "./img/d12.png", "input": "d12" },
+    { "id": 20, "titulo": "Dado de 20 caras", "imagen": "./img/d20.png", "input": "d20" }
+]
